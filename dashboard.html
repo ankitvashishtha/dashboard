@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- start: Meta -->
+    <meta charset="utf-8">
+    <title>Directorate of Economics and Statistics - DASHBOARD</title>
+    <!-- end: Meta -->
+
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    <link href="dbContent/bootstrap.min.css" rel="stylesheet" />
+    <link href="dbContent/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="dbContent/descg.css" rel="stylesheet" />
+    <link href="dbContent/style.css" rel="stylesheet" />
+    <link href="dbContent/font/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="dbContent/nprogress.css" rel="stylesheet" />
+    <link rel="icon" href="dbContent/favicon.ico" type="images/x-icon" />
+    <!-- end: Favicon -->
+    <base href="/" />
+</head>
+
+<body ng-app="dashboardApp" id="drop" >
+    <!-- start: Header -->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container-fluid" >
+                <a class="brand" href="http://descg.gov.in/" target="_blank"><b><span id="txtHeading">Directorate of Economics and Statistics, Chhattisgarh</span></b>    </a>
+                <!-- start: Header Menu -->
+                <div class="nav-no-collapse header-nav">
+                    <ul class="nav pull-right">
+                        <!--<li>
+                            <a id="login" class="btn" href="dashboardLogin.html">Login</a><a id="logout" class="btn" ng-click="logout()">Logout</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    
+    <div ui-view></div>
+    <footer>
+        <p>
+            <span style="text-align: left; float: left">&copy; 2016 <a href="http://descg.gov.in/">DESCG</a></span>
+            <!--<span style="text-align: center; margin-left:40%" > <img src='http://www.hit-counts.com/counter.php?t=MTM5MTIwOQ==' border='0' alt='Visitor Counter'></span>-->
+            <span style="text-align: right; float: right">Last Updated on 17-03-2017   </span>
+        </p>
+    </footer>
+    <script src="dbContent/jquery-2.2.3.min.js"></script>
+    <script src="dbContent/jquery-ui.min.js"></script>
+    <script src="dbContent/jszip.js"></script>
+    <script src="dbContent/xlsx.js"></script>
+    <script src="dbContent/bootstrap.min.js"></script>
+    <script src="dbContent/angular.min.js"></script>
+    <script src="dbContent/angular-ui-router.min.js"></script>
+    <script src="dbContent/Chart.js"></script>
+    <!--<script src="dbContent/Chart.min.js"></script>-->
+    <script src="dbContent/d3.js"></script>
+    <script src="dbContent/nprogress.js"></script>
+    <script src="dbContent/html2canvas.js"></script>
+    <script src="dbContent/jspdf.debug.js"></script>
+    <script src="dbContent/jspdf.plugin.autotable.js"></script>
+    <script src="dbContent/app.js"></script>
+    <script src="dbContent/descg.js"></script>
+    <script src="dbContent/SmoothScroll.js"></script>
+    <script src="dbContent/jquery.waypoints.min.js"></script>
+    <script src="dbContent/jquery.counterup.min.js"></script>
+    <!-- start: JavaScript-->
+    <script>
+        /*----- Global variable start------*/
+        var IndicatorName = '';
+        /*----- Global variable end------*/
+    </script>
+
+</body>
+</html>

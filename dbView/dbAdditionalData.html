@@ -1,0 +1,50 @@
+﻿<div class="container" id="modalUploadData" ng-controller="dashboardCtrl">
+    <div >
+       
+        <h3>Upload Your Data</h3>
+    </div>
+    <div >
+        <div >
+            <div><a href="dbContent/sample.xlsx">Download Sample File</a> <button type="button" class="btn btn-info btn-small pull-right" ng-click="insertData()">Save your data</button></div>
+            <br />
+            <div class="controls">
+                <div class="drop">Drop an XLSX file here to see sheet data</div>
+                <br />
+                Or you can
+                <input type="file" name="xlfile" id="xlf">
+            </div>
+            <div>
+                <h3>Instruction</h3>
+                <ul>
+                    <li>
+                        File must be in xlsx format.
+                    </li>
+                    <li>
+                        First two coloum must be same as sample file, please don't change the order of district.
+                    </li>
+                    <li>
+                        Values must be in number.
+                    </li>
+                    <li>
+                        You can increase number of sheet for different year,except the data part do not change the other information in the additional sheets, a small change in spelling would also result in mismatch and the output would not be generated
+                    </li>
+                    <li>
+                        Unit should be Number, Ratio or Percent.
+                    </li>
+                    <li>
+                        If you have specific formate of excel sheet then you can drag and drop anywhere in the dashboard.
+                    </li>
+                    <li>
+                        Your data will not be saved in our server, so if you refresh the main dashboard your custom data would be lost
+                    </li>
+                    <li>
+                        We are working on saving of data files in server it would be made available after sometime.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div >
+        <a  class="btn btn-info" ui-sref="home">Back</a>
+    </div>
+</div>

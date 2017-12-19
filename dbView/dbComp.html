@@ -1,0 +1,296 @@
+﻿
+
+    <div id="html-content-holder" class="container-fluid-full" ng-controller="comparisonCtrl">
+        <div class="row-fluid">
+            <!-- start: Content -->
+            <div id="content">
+                <div class="clearfix"></div>
+                <div class="row-fluid" style="margin-top: 5px">
+                    <div class="sparkLineStats widget combg" style="margin-bottom: 7px;" ontablet="span5" ondesktop="span4">
+                        <div class="span3">
+                            <select class="select" style="width: 95%;" id="ddlSector" ng-model="ddlSector" ng-change="setIndicators();" ng-options="sector as sector.sectorName for sector in sectors track by sector.id" title="Sector"></select>
+                        </div>
+                        <div class="span3">
+                            <select style="width: 95%;" ng-change="setYearDdl();" title="Indicator" ng-options="indicator as indicator.indicatorName for indicator in indicators track by indicator.id" ng-model="ddlIndicator"></select>
+                        </div>
+                        <div class="span3">
+                            <select style="width: 95%;" ng-change="setSourceDdl();" title="Time Period" ng-options="year as year.year for year in years track by year.year" ng-model="ddlYear"></select>
+                        </div>
+                        <div class="span3">
+                            <select style="width: 95%;" ng-change="setMapDdl();" title="Source" ng-model="ddlSource" ng-options="source as source.sourceName for source in sources track by source.id"> </select>
+                            <select style="width: 100px; position:absolute; top:115px; left:10px; z-index:5;" ng-change="getAllData();" ng-model="ddlMap" ng-options="map as map.mapName for map in maps track by map.id"> </select>
+                        </div>
+                    </div>
+                    <div class="sparkLineStats widget combg" style="margin-bottom: 7px;" ontablet="span5" ondesktop="span4" ng-controller="filterCtrl">
+                        <div class="span3">
+                           
+                            <!--<span class="titleFilter" ng-hide="titleIndicator" ng-init="titleIndicator=true">{{titleText}}</span>-->
+                            <!--<strong>Sector : </strong>-->
+                            <select class="select" style="width: 95%;" id="ddlSector" ng-model="ddlSector" ng-change="setIndicators();" ng-options="sector as sector.sectorName for sector in sectors track by sector.id" title="Sector"></select>
+                        </div>
+                        <div class="span3">
+                            <select style="width: 95%;" id="ddlIndicator" ng-change="setYearDdl();" title="Indicator" ng-options="indicator as indicator.indicatorName for indicator in indicators track by indicator.id" ng-model="ddlIndicator"></select>
+                        </div>
+                        <div class="span3">
+                            <select style="width: 95%;" id="ddlYear" ng-change="setSourceDdl();" title="Time Period" ng-options="year as year.year for year in years track by year.year" ng-model="ddlYear"></select>
+                        </div>
+                        <div class="span3">
+                            <select style="width: 95%;" id="ddlSource" ng-change="setMapDdl();" title="Source" ng-model="ddlSource" ng-options="source as source.sourceName for source in sources track by source.id"> </select>
+                            <select style="width: 100px; position:absolute; top:115px; left:10px; z-index:5;" id="ddlMap" ng-change="getAllData();" ng-model="ddlMap" ng-options="map as map.mapName for map in maps track by map.id"> </select>
+                        </div>
+                    </div>
+                    
+                    <div class="sparkLineStats widget combg"  ontablet="span5" ondesktop="span4">
+                        <select ng-model="operator" style="width:100px;" ng-init="operator='-'" ng-change="compare();">
+                            <option value="-">Subtraction</option>
+                            <option value="+">Addition</option>
+                            <option value="/">Division</option>
+                            <option value="x">Multiplication</option>
+                        </select>
+                        <a class="pull-right hvr-pulse-grow" title="Click here to view data" ng-click="compare();"><i class="fa fa-sign-in fa-2x" style="color: #578EBE; cursor: pointer; margin-right: 20px;"></i></a>
+                        <a class="pull-right hvr-pulse-grow" data-toggle="modal" data-target="#pdfOption" title="Publication pdf"><i class="fa fa-book fa-2x" aria-hidden="true" style="color: dodgerblue; cursor: pointer; margin-right: 20px;"></i></a>
+                        <a class=" pull-right hvr-pulse-grow" title="Download to pdf"><i class="fa fa-2x {{pdfLoader}}" ng-click="pdfDownload();" aria-hidden="true" style="color: #cc3300; cursor: pointer; margin-right: 20px;"></i></a>
+                        <a class="pull-right hvr-pulse-grow" title="Population Trend" href="http://descg.gov.in/PopulationTrend/PopulationCensus.aspx" target="_blank"><i class="fa fa-line-chart fa-2x" style="color: #009999; cursor: pointer; margin-right: 20px;"></i></a>
+                        <a class="pull-right hvr-pulse-grow" title="Dashboard" ui-sref="home"><i class="fa fa-dashboard fa-2x" style="color: #578EBE; cursor: pointer; margin-right: 20px;"></i></a>
+                       
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <div class="sparkLineStats widget combg" style="height: 630px;  margin-bottom: 7px;" ng-hide="hideMap2" ontablet="span5" ondesktop="span4">
+                        <div style="color:#000;">
+                            <span style="font-size: medium;">{{ddlIndicator.indicatorName}}</span>
+                            <span class="pull-right" style="font-size: large; position:absolute; z-index:10; left:320px;">Chhattisgarh: {{cgData2.values}} <!--<a id="map_dwld" title="Download Map" onclick="downloadMap();"><i class="fa fa-download fa-sm" aria-hidden="true" style="cursor: pointer"></i></a>--></span>
+                        </div>
+                        <div>
+                            <div id="map2">
+                            </div>
+                            <div id="legendsection" class="lag " title="Click for change the legend">
+                                <div class="flip">
+                                    <h4 class="text-center"><span>Legends</span></h4>
+                                    <div class="card">
+                                        <div id="facefront" class="face front hvr-buzz-out">
+                                            <div>
+                                                <span ng-if="natureId2!='2'" id="lgdGreen" style="display: inline-block; background-color: #00A300; height: 20px; width: 20px;"></span>
+                                                <span ng-if="natureId2=='2'" style="display: inline-block; background-color: #EB3C00; height: 20px; width: 20px;"></span>
+                                                <span>{{mid+stp}}</span>-   <span id="high1" disabled>{{high}}</span>
+                                            </div>
+                                            <div>
+                                                <span style="display: inline-block; background-color: #FFC40D; height: 20px; width: 20px;"></span>
+                                                <span>{{low2+stp}}</span>-  <span>{{mid}}</span>
+                                            </div>
+                                            <div>
+                                                <span ng-if="natureId2!='2'" id="lgdRed" style="display: inline-block; background-color: #EB3C00; height: 20px; width: 20px;"></span>
+                                                <span ng-if="natureId2=='2'" style="display: inline-block; background-color: #00A300; height: 20px; width: 20px;"></span>
+                                                <span>{{low}}</span>-   <span>{{low2}}</span>
+                                            </div>
+                                            <div>
+                                                <span style="display: inline-block; background-color: #808080; height: 20px; width: 20px;"></span>
+                                                Not Available
+                                            </div>
+                                        </div>
+                                        <div id="legendBack" class="face back " title="Double click for close">
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input type="number" value="0" step="{{stp}}" style="width: 70px" disabled ng-model="mid+stp" />
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="number" value="0" step="{{stp}}" style="width: 70px" ng-model="high" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span style="display: inline-block; background-color: green; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input type="number" ng-model="low2+stp" step="{{stp}}" style="width: 70px" disabled />
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="number" step="{{stp}}" style="width: 70px" ng-model="mid" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span style="display: inline-block; background-color: #FFC40D; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input type="number" step="{{stp}}" style="width: 70px" ng-model="low" />
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="number" step="{{stp}}" style="width: 70px" ng-model="low2" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span class="jscolor" style="display: inline-block; background-color: red; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span6">
+                                                    <a href="#" class="btn btn-primary" ng-click="compare();" style="width: 190px;">Save changes</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="sparkLineStats widget combg"  style="height: 630px; margin-bottom: 7px;" ontablet="span5" ondesktop="span4" ng-controller="filterCtrl" >
+                        <div style="color:#000;">
+                            <span style="font-size: medium; ">{{ddlIndicator.indicatorName}}</span>
+                            <span id="txtState" class="pull-right" style="font-size: large; position:absolute; z-index:10; left:320px;">Chhattisgarh:<br /> {{cgData.values}}</span>
+                        
+                        </div>
+                        <div>
+                            <div id="map">
+                            </div>
+                            <div id="legendsection" class="lag " title="Click for change the legend">
+                                <div class="flip">
+                                    <h4 class="text-center"><span>Legends</span></h4>
+                                    <div class="card">
+                                        <div id="facefront" class="face front hvr-buzz-out">
+                                            <div>
+                                                <span ng-if="natureId!='2'" id="lgdGreen" style="display: inline-block; background-color: #00A300; height: 20px; width: 20px;"></span>
+                                                <span ng-if="natureId=='2'" style="display: inline-block; background-color: #EB3C00; height: 20px; width: 20px;"></span>
+                                                <span>{{mid+stp}}</span>-   <span id="high1" disabled>{{high}}</span>
+                                            </div>
+                                            <div>
+                                                <span id="lgdYellow" style="display: inline-block; background-color: #FFC40D; height: 20px; width: 20px;"></span>
+                                                <span>{{low2+stp}}</span>-  <span>{{mid}}</span>
+                                            </div>
+                                            <div>
+                                                <span ng-if="natureId!='2'" id="lgdRed" style="display: inline-block; background-color: #EB3C00; height: 20px; width: 20px;"></span>
+                                                <span ng-if="natureId=='2'" style="display: inline-block; background-color: #00A300; height: 20px; width: 20px;"></span>
+                                                <span>{{low}}</span>-   <span>{{low2}}</span>
+                                            </div>
+                                            <div>
+                                                <span style="display: inline-block; background-color: #808080; height: 20px; width: 20px;"></span>
+                                                Not Available
+                                            </div>
+                                        </div>
+                                        <div id="legendBack" class="face back " title="Double click for close">
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input type="number" value="0" step="{{stp}}" style="width: 70px" disabled ng-model="mid+stp" />
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="number" value="0" step="{{stp}}" style="width: 70px"  ng-model="high" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span style="display: inline-block; background-color: green; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input type="number" ng-model="low2+stp" step="{{stp}}" style="width: 70px" disabled />
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="number" step="{{stp}}" style="width: 70px" ng-model="mid" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span style="display: inline-block; background-color: #FFC40D; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input type="number" step="{{stp}}" style="width: 70px" ng-model="low" />
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="number" step="{{stp}}" style="width: 70px" ng-model="low2" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span class="jscolor" style="display: inline-block; background-color: red; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span6">
+                                                    <a id="aaa" href="#" class="btn btn-primary" ng-click="compare();" style="width: 190px;">Save changes</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    
+                  
+                    
+                      <div class="sparkLineStats widget combg" style="height: 630px; margin-bottom: 7px;" ontablet="span5" ondesktop="span4">
+                        <div style="font-size:20px;">
+                          
+                            </div>
+                            <div id="hBarSection" style="height:100%"> </div>
+
+
+                        </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="sparkLineStats widget combg " style="height: 400px; width:99.04196581196582%;" ontablet="span5" ondesktop="span12">
+                        <div id="chartSection2" >
+                            <!-- //style="background-color: #FFFFFF"-->
+                            <canvas id="barChart2" ></canvas>
+                        </div>
+                    </div>
+                    <!--<div class="sparkLineStats widget combg" style="height: 300px;" ontablet="span5" ondesktop="span4">
+                       
+                        <div style="font-size:20px;">
+                            <span>Difference : </span>
+                        </div>
+                        <br />
+                        <div id="donutChartSection"></div>
+                    </div>-->
+                </div>
+            <!--pdf option modal-->
+                <div class="modal hide fade responsive" id="pdfOption">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3>Customize Indicator</h3>
+                    </div>
+                    <div class="modal-body responsive">
+                        <div class="row-fluid">
+                            <div class="span3">Page heading:</div>
+                            <div class="span9">
+                                <input id="pageHeading" type="text" style="width:90%;" ng-model="pageHeading"
+                                        ng-init="pageHeading='Directorate of Economics and Statistics, Chhattisgarh'" />
+                            </div>
+                        </div>
+                        
+                        <div class="row-fluid">
+                            <div class="box span12">
+                                <div class="box-header">
+                                    <h2>Denominator</h2>
+                                </div>
+                                <div class="box-content" style="color: black;">
+                                    <div class="row-fluid">
+                                        <div class="span2">
+                                            <span>PDF Pages:</span>
+                                        </div>
+                                        <div class="span8">
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="" ng-checked="printMap" ng-init="printMap=true" ng-disabled="true">Map with diffrence chart</label>
+                                                <label><input type="checkbox" value="" ng-model="printChart"  ng-init="printChart=true">Bar chart</label>
+                                                <label><input type="checkbox" value="" ng-model="printTable" ng-init="printTable=true">Table</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button ng-click="pdfDownload()" type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/.fluid-container-->
+    </div>
+
+  

@@ -1,0 +1,569 @@
+﻿
+<div ng-controller="indiaCtrl">
+    <div id="html-content-holder" class="container-fluid-full">
+        <div class="row-fluid ">
+            <!-- start: Content -->
+            <div id="content" class="span12 rowSortable">
+                <div class="clearfix"></div>
+                <div class="row-fluid connectedSortable">
+                    <div id="" class="span2 statbox bgimage hvr-glow" ng-hide="hideDivision" ontablet="span6" ondesktop="span2">
+                        <a href="" class="btn-close" ng-click="hideDivision=true"><i class="fa fa-close"></i></a>
+                        <div class="boxchart"></div>
+                        <div id="DivisionValue" class="number">29<i class="icon-arrow-down"></i></div>
+                        <div class="title"></div>
+                        <div class="footer1">
+                            <a >State</a>
+                        </div>
+                    </div>
+                    <div class="span2 statbox bgimage hvr-glow" ng-hide="hideDistrict" ontablet="span6" ondesktop="span2">
+                        <a href="" class="btn-close" ng-click="hideDistrict=true"><i class="fa fa-close remove"></i></a>
+                        <div class="boxchart"></div>
+                        <div class="number"><span id="DisValue">7</span><i class="icon-arrow-up"></i></div>
+                        <div class="title"></div>
+                        <div class="footer1">
+                            <a >UT</a>
+                            <!--     <a id="DisText" href="#"  >District</a>-->
+                        </div>
+                    </div>
+                    <div class="span2 statbox bgimage hvr-glow" ng-hide="hideTehsil" ontablet="span6" ondesktop="span2">
+                        <a href="" class="btn-close" ng-click="hideTehsil=true"><i class="fa fa-close remove"></i></a>
+                        <div class="boxchart"></div>
+                        <div class="number"><span id="TehValue">687</span><i class="icon-arrow-up"></i></div>
+                        <div class="title"></div>
+                        <div class="footer1">
+                            <a >District</a>
+                        </div>
+                    </div>
+                    <div class="span2 statbox bgimage hvr-glow" ng-hide="hideBlock" ontablet="span6" ondesktop="span2">
+                        <a href="" class="btn-close" ng-click="hideBlock=true"><i class="fa fa-close remove"></i></a>
+                        <div class="boxchart"></div>
+                        <div id="" class="number"><span id="BlkValue">???</span><i class="icon-arrow-up"></i></div>
+                        <div class="title"></div>
+                        <div class="footer1">
+                            <a>Blocks</a>
+                        </div>
+                    </div>
+                    <div class="span2 statbox bgimage hvr-glow" ng-hide="hideGP" ontablet="span6" ondesktop="span2">
+                        <a href="" class="btn-close" ng-click="hideGP=true"><i class="fa fa-close remove"></i></a>
+                        <div class="boxchart"></div>
+                        <div class="number"><span id="GpValue">???</span><i class="icon-arrow-down"></i></div>
+                        <div class="title"></div>
+                        <div class="footer1">
+                            <a >Gram Panchayat</a>
+                        </div>
+                    </div>
+                    <div class="span2 statbox bgimage hvr-glow" ng-hide="hideVillage" ontablet="span6" ondesktop="span2">
+                        <a href="" class="btn-close" ng-click="hideVillage=true"><i class="fa fa-close remove"></i></a>
+                        <div class="boxchart"></div>
+                        <div id="VilValue" class="number">???<i class="icon-arrow-up"></i></div>
+                        <div class="title"></div>
+                        <div class="footer1">
+                            <a >Village</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row-fluid" style="margin-top: 5px; " ng-controller="filterCtrl">
+                    <div class="sparkLineStats widget district" style="margin-bottom: 7px;" ontablet="span6" ondesktop="span12">
+                        <div id="filters">
+                            <div class="span2">
+                               
+                                <select class="select" style="width: 95%;" id="ddlSector" ng-model="ddlSector" ng-change="setIndicators();" ng-options="sector as sector.sectorName for sector in sectors track by sector.id" title="Sector"></select>
+</div>
+                            <div class="span2">
+                                <!--<b>Indicator:</b>-->
+                                <select style="width: 95%;" id="ddlIndicator" ng-change="setYearDdl();" title="Indicator" ng-options="indicator as indicator.indicatorName for indicator in indicators track by indicator.id" ng-model="ddlIndicator"></select>
+
+                                <!--<select style="width: 130px;" id="ddlIndicatorExcel" onchange="getAllDataExcel();"></select>-->
+                            </div>
+                            <div class="span2">
+                                <!--<b>Year:</b>-->
+                                <select style="width: 95%;" id="ddlYear" ng-change="setSourceDdl();" title="Time Period" ng-options="year as year.year for year in years track by year.year" ng-model="ddlYear"></select>
+                                <!--<select style="width: 100px;" id="ddlYearExcel" onchange="getAllDataExcel();"></select>-->
+                            </div>
+                            <div class="span2">
+                                <b>Source : </b><select style="width: 60%;" id="ddlSource" ng-change="setMapDdl();" title="Source" ng-model="ddlSource" ng-options="source as source.sourceName for source in sources track by source.id"> </select>
+                            </div>
+                        </div>
+                        <span id="filterName" style="color:gray; font-size:large;"> </span>
+                        <div class="span4 pull-right hidepane">
+                            <a class="pull-right hvr-pulse-grow" onclick="location.reload();" title="Reset All"><i class="fa fa-refresh fa-2x" aria-hidden="true" style="color: #578EBE; cursor: pointer"></i></a>
+                            <a class="pull-right hvr-pulse-grow" data-toggle="modal" data-target="#modalDisclaimer" title="Disclaimer"><i class="fa fa-info-circle fa-2x" aria-hidden="true" style="color: #cc3300; cursor: pointer; margin-right: 20px;"></i></a>
+                            <a class="pull-right hvr-pulse-grow" id="btn-Preview-Image" title="Download to pdf"><i class="fa fa-2x {{pdfLoader}}" ng-click="pdfDownload();" aria-hidden="true" style="color: #cc3300; cursor: pointer; margin-right: 20px;"></i></a>
+                            <a class="pull-right hvr-pulse-grow" data-toggle="modal" data-target="#cstmIndiModal" ng-click="setIndicatorsNum()" title="Custom Indicator" data-rel="tooltip"><i class="fa fa-bar-chart fa-2x" aria-hidden="true" style="color: orange; cursor: pointer; margin-right: 20px;"></i></a>
+                            <a class="pull-right hvr-pulse-grow" title="Chhattisgarh data" ui-sref="home"><span style="background: url('../dbContent/cg.png'); cursor: pointer; margin-right: 20px;" /> </a>
+                        
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid connectedSortable">
+                    <div class="sparkLineStats widget white " style="height: 631px; padding-left:10px;" ng-hide="hideMap" ontablet="span5" ondesktop="span5">
+                        <div style="color:#000;">
+                            <a href="" class="btn-close" ng-click="hideMap=true"><i class="fa fa-close remove"></i></a>
+                            <span id="txtSource" style="font-size: medium;">Source:</span> <span id="src" style="font-size: medium;">{{cgData.sourceName}}</span>
+                            <label class="checkbox inline" style="margin-left:3%; margin-top:-10px;">
+                                <input type="checkbox" id="cbDistName" checked> Name
+                            </label>
+                            <label class="checkbox inline" style="margin-top:-10px;">
+                                <input type="checkbox" id="cbDistValue" checked> Value
+                            </label>
+                            <span id="txtState" class="pull-right" style="font-size: large;">India <!--<a id="map_dwld" title="Download Map" onclick="downloadMap();"><i class="fa fa-download fa-sm" aria-hidden="true" style="cursor: pointer"></i></a>--></span>
+                        </div>
+                        <div id="FullMapSection">
+                            <div id="map" >
+                               
+                            </div>
+                            <div id="legendsection" class="lagIndia " title="Click for change the legend">
+                                <div class="flip">
+                                    <h4 class="text-center"><span>Legends</span></h4>
+                                    <div class="card">
+                                        <div id="facefront" class="face front ">
+                                            <div>
+                                                <span ng-if="natureId!='2'" id="lgdGreen" style="display: inline-block; background-color: #00A300; height: 20px; width: 20px;"></span>
+                                                <span ng-if="natureId=='2'"  style="display: inline-block; background-color: #EB3C00; height: 20px; width: 20px;"></span>
+                                                <span id="high2" class="high2" ></span>-   <span id="high1" class="high1" disabled></span>
+                                            </div>
+                                            <div>
+                                                <span id="lgdYellow" style="display: inline-block; background-color: #FFC40D; height: 20px; width: 20px;"></span>
+                                                <span id="mid2" class="mid2"></span>-  <span id="mid1" class="mid1"></span>
+                                            </div>
+                                            <div>
+                                                <span ng-if="natureId!='2'" id="lgdRed" style="display: inline-block; background-color: #EB3C00; height: 20px; width: 20px;"></span>
+                                                <span ng-if="natureId=='2'" style="display: inline-block; background-color: #00A300; height: 20px; width: 20px;"></span>
+                                                <span id="low2" class="low2"></span>-   <span id="low1" class="low1"></span>
+
+
+                                            </div>
+                                            <div>
+                                                <span style="display: inline-block; background-color: #808080; height: 20px; width: 20px;"></span>
+                                                Not Available
+
+                                            </div>
+                                        </div>
+                                        <div id="legendBack" class="face back " title="Double click for close">
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                   
+                                                    <input id="txthigh2" type="number" value="0" step="{{stp}}" style="width: 70px" disabled ng-model="mid+stp" />
+                                                </div>
+                                                <div class="span4">
+                                                    <input id="txthigh1" type="number" value="0" step="{{stp}}" style="width: 70px" disabled />
+                                                </div>
+                                                <div class="span1">
+                                                    
+                                                    <span ng-if="natureId!='2'" style="display: inline-block; background-color: green; height: 25px; width: 25px;"></span>
+                                                    <span ng-if="natureId=='2'" style="display: inline-block; background-color: red; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input id="txtmid2" type="number" ng-model="low+stp" step="{{stp}}" style="width: 70px" disabled />
+                                                </div>
+                                                <div class="span4">
+                                                    <input id="txtmid1" type="number" step="{{stp}}" style="width: 70px" ng-model="mid" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span style="display: inline-block; background-color: #FFC40D; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <input id="txtlow2" type="number" step="{{stp}}" style="width: 70px" />
+                                                </div>
+                                                <div class="span4">
+                                                    <input id="txtlow1" type="number" step="{{stp}}" style="width: 70px" ng-model="low" />
+                                                </div>
+                                                <div class="span1">
+                                                    <span ng-if="natureId!='2'" style="display: inline-block; background-color: red; height: 25px; width: 25px;"></span>
+                                                    <span ng-if="natureId=='2'" style="display: inline-block; background-color: green; height: 25px; width: 25px;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span6">
+                                                    <a id="aaa" href="" class="btn btn-primary" ng-click="setCustomLegend();" style="width: 190px;">Save changes</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <!-- End .sparkStats -->
+
+                    <div class="span7 widget white" ng-hide="hideChart" ontablet="span7" ondesktop="span7">
+                        <a href="" class="btn-close pull-right" ng-click="hideChart=true"><i class="fa fa-close remove"></i></a>
+                        <div> Number of district in the range {{lowerLimit}} to <span id="higherLimit">{{higherLimit}} </span> is <span id="barCount" style="font-weight:600">{{noOfDist}}</span></div>
+                        <div id="chartSection" style="height: 320px; width:740px">
+                            <!-- //style="background-color: #FFFFFF"-->
+                            <canvas id="barChart" height="100"></canvas>
+                        </div>
+                        <!--<div id="stats-chart2" style="height: 282px"></div>-->
+                        <input type="number" id="lowerLimit" class="ChartLimit" ng-model="lowerLimit" ng-init="lowerLimit=0" placeholder="lower limit" title="Lower limit" ng-keyup="$event.keyCode == 13 ? setChartLimit() : null" />
+                        <span id="chartText"></span>
+                    </div>
+                    <div class="span2" style="width:16.39599452991453%;" ng-hide="hideCgValue" ontablet="span4" ondesktop="span2">
+                        <div class="circleStatsItemBox white hvr-curl-bottom-right">
+                            <div class="header">
+                                &nbsp;<span class="text-muted " id="distName" style="text-align: center;"></span>
+                                <a href="" class="btn-close pull-right" ng-click="hideCgValue=true"><i class="fa fa-close remove"></i></a>
+                            </div>
+                            <span id="cgData" class="text-muted boxBody"></span>
+
+                            <div class="footer">
+                                <span class="sep">
+                                    &nbsp; <span id="txtCG"></span>
+                                    (<span id="txtUnit"></span>)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2" style="width:16.21599452991453%;" ng-hide="hideMean" ontablet="span4" ondesktop="span2">
+                        <div class="circleStatsItemBox white hvr-curl-bottom-right">
+                            <div id="nearMeanTxt" class="header">
+                                &nbsp;Nearest district to mean
+                                <a href="" class="btn-close pull-right" ng-click="hideMean=true"><i class="fa fa-close remove"></i></a>
+                            </div>
+                            <span id="nearMean" class="text-muted boxBody" style="font-size:22px;">{{nearMean}}</span>
+
+                            <div>
+                            </div>
+                            <div id="meanLower" class="footer">
+                                &nbsp;Mean :  <span id="distMean" class="distMean">{{meanValue}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2 " style="width:16.21599452991453%;" ng-hide="hideMedian" ontablet="span4" ondesktop="span2">
+                        <div class="circleStatsItemBox white hvr-curl-bottom-right">
+                            <div id="nearMedianTxt" class="header">
+                                &nbsp;Median district
+                                <a href="" class="btn-close pull-right" ng-click="hideMedian=true"><i class="fa fa-close remove"></i></a>
+                            </div>
+                            <span id="nearMedian" class="text-muted boxBody" style="font-size:20px;">{{nearMedian}}</span>
+
+
+                            <div id="medianLower" class="footer">
+                                &nbsp;Median :  <span class="distMedian">{{medianValue}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2 " style="width:16.21599452991453%;" ng-hide="hideCT" ontablet="span4" ondesktop="span2">
+                        <div class="circleStatsItemBox white hvr-curl-bottom-right">
+                            <div id="ctText" class="header">
+                                &nbsp;Central tendency
+                                <a href="" class="btn-close pull-right" ng-click="hideCT=true"><i class="fa fa-close remove"></i></a>
+                            </div>
+                            <div class="centraltendency">
+                                &nbsp;Mean : <b><span class="distMean">{{meanValue}}</span></b>
+                            </div>
+                            <br />
+                            <div class="centraltendency">
+                                &nbsp;Median : <b><span class="distMedian">{{medianValue}}</span></b>
+                            </div>
+                            <br />
+                            <div id="rangeText" class="centraltendency">
+                                &nbsp;Range : <b><span id="range">{{range}}</span></b>
+                            </div>
+                            <!-- <div>
+                                &nbsp;Variance : <b><span id="variance"></span></b>
+                            </div>
+                            <div>
+                                &nbsp;Standard Deviation : <b><span id="standardDeviation"></span></b>
+                            </div>-->
+                            <div class="footer">
+                                &nbsp;<span id="Span2"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row-fluid connectedSortable">
+
+                    <div id="divHighRank" ng-hide="hideGreen" class="span3 statbox greenLight hvr-glow" ontablet="span6" ondesktop="span3">
+
+                        <div class="boxchart" id="highDist"></div>
+                        <div class="number1"><a href="" class="pull-right" ng-click="hideGreen=true"><i class="fa fa-close"></i></a></div>
+                        <div class="title"></div>
+                        <div class="footer">
+                            <span id="highTotal" style="font-size:20px; font-weight:600;"></span> <a id="highText" href="" style="color:#fff;">District in Green Range (<span class="high2"></span> - <span class="high1"></span>)</a>
+                        </div>
+
+                    </div>
+                    <div class="span3 statbox pOrange hvr-glow" ng-hide="hideYellow" ontablet="span6" ondesktop="span3">
+                        <div class="boxchart" id="midDist"></div>
+                        <div class="number1"><a href="" class="btn-close pull-right" ng-click="hideYellow=true"><i class="fa fa-close remove"></i></a></div>
+                        <div class="title"></div>
+                        <div class="footer">
+                            <span id="midTotal" style="font-size:20px; font-weight:600;"></span> <a id="midText" href="" style="color:#fff;">District in Yellow Range (<span class="mid2"></span> - <span class="mid1"></span>)</a>
+                        </div>
+
+                    </div>
+                    <div class="span3 statbox pRed hvr-glow" ontablet="span6" ng-hide="hideRed" ondesktop="span3">
+                        <div class="boxchart" id="lowDist"></div>
+                        <div class="number1"><a href="" class="btn-close pull-right" ng-click="hideRed=true"><i class="fa fa-close remove"></i></a></div>
+                        <div class="title"></div>
+                        <div class="footer">
+                            <span id="lowTotal" style="font-size:20px; font-weight:600;"></span> <a id="lowText" href="" style="color:#fff;">District in Red Range (<span class="low2"></span> - <span class="low1"></span>) </a>
+
+                        </div>
+
+                    </div>
+                    <div class="span3 statbox tstclr hvr-glow" ng-hide="hidePopClock" ontablet="span6" ondesktop="span3">
+                        <div id="PopClock" class="boxchart">Population Clock</div>
+                        <div class="number1"><a href="" class="btn-close pull-right" ng-click="hidePopClock=true"><i class="fa fa-close"></i></a></div>
+                        <div class="number"><span class="popCounter" id="population">28,557,805</span><i class="icon-arrow-up"></i></div>
+                        <div class="title"></div>
+                        <div class="footer">
+                            <a id="PopState" href="" style="color:#fff;">Chhattisgarh</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/.fluid-container-->
+        </div>
+    </div>
+    <!--/fluid-row-->
+    <div class="clearfix"></div>
+
+    <!-- modal Opan -->
+    <form class="modal hide fade responsive" id="cstmIndiModal" ng-controller="custumIndicatorCtrl" style="width: 75%; margin-left:-500px;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3>Customize Indicator</h3>
+        </div>
+        <div class="modal-body responsive">
+            <div class="row-fluid">
+                <div class="span3">Indicator Name:</div>
+                <div class="span9">
+                    <input id="custIndicator" type="text" style="width:90%;" ng-model="indicatorName" ng-init="indicatorName='New Indicator'" />
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="box span12">
+                    <div class="box-header">
+                        <h2>Numerator</h2>
+                    </div>
+                    <div class="box-content" style="color: black;">
+                        <div class="row-fluid">
+                            <div class="span1">
+                                <span>Sector:</span>
+                            </div>
+                            <div class="span2">
+                                <select id="ddlSector1" ng-model="ddlSectorNum" ng-change="setIndicatorsNum()" ng-init="ddlSectorNum='0'" style="width: 95%">
+                                    <option value="0">--Select--</option>
+                                    <option value="1">Population</option>
+                                    <option value="2">CRVS MIS</option>
+                                    <option value="3">AHS</option>
+                                    <option value="4">CRVS AVS</option>
+                                </select>
+                            </div>
+                            <div class="span1">
+                                <span>Indicator:</span>
+                            </div>
+                            <div class="span2">
+                                <select id="ddlNumerator" ng-change="setYearDdlNum()" ng-options="indicator as indicator.indicatorName for indicator in indicatorsNum track by indicator.id" ng-model="ddlIndicatorNum" style="width: 95%"></select>
+                            </div>
+                            <div class="span1">
+                                <span>Year:</span>
+                            </div>
+                            <div class="span1">
+                                <select id="ddlYearNum" style="width: 100%" ng-change="setSourceDdlNum();" title="Time Period" ng-options="year as year.year for year in yearsNum track by year.year" ng-model="ddlYearNum"></select>
+                            </div>
+                            <div class="span1">
+                                <span>Source:</span>
+                            </div>
+                            <div class="span2">
+                                <select id="ddlSourceNum" style="width: 100%" ng-change="setMapDdlNum();" title="Source" ng-model="ddlSourceNum" ng-options="source as source.sourceName for source in sourcesNum track by source.id"></select>
+                            </div>
+                            <div class="span1">
+                                <span>Map:</span>
+                            </div>
+                            <div class="span1">
+                                <select id="ddlMapNum" style="width: 100%" ng-model="ddlMapNum" ng-options="map as map.mapName for map in mapsNum track by map.id"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="box span12">
+                    <div class="box-header">
+                        <h2>Denominator</h2>
+                    </div>
+                    <div class="box-content" style="color: black;">
+                        <div class="row-fluid">
+                            <div class="span1">
+                                <span>Sector:</span>
+                            </div>
+                            <div class="span2">
+                                <select id="ddlSector1" ng-model="ddlSectorDen" ng-change="setIndicatorsDen()" ng-init="ddlSectorDen='0'" style="width: 95%">
+                                    <option value="0">--Select--</option>
+                                    <option value="1">Population</option>
+                                    <option value="2">CRVS MIS</option>
+                                    <option value="3">AHS</option>
+                                    <option value="4">CRVS AVS</option>
+                                </select>
+                            </div>
+                            <div class="span1">
+                                <span>Indicator:</span>
+                            </div>
+                            <div class="span2">
+                                <select id="ddlNumeratorDen" ng-change="setYearDdlDen()" ng-options="indicator as indicator.indicatorName for indicator in indicatorsDen track by indicator.id" ng-model="ddlIndicatorDen" style="width: 95%"></select>
+                            </div>
+                            <div class="span1">
+                                <span>Year:</span>
+                            </div>
+                            <div class="span1">
+                                <select id="ddlYearDen" style="width: 100%" ng-change="setSourceDdlDen();" title="Time Period" ng-options="year as year.year for year in yearsDen track by year.year" ng-model="ddlYearDen"></select>
+                            </div>
+                            <div class="span1">
+                                <span>Source:</span>
+                            </div>
+                            <div class="span2">
+                                <select id="ddlSourceDen" style="width: 100%" ng-change="setMapDdlDen();" title="Source" ng-model="ddlSourceDen" ng-options="source as source.sourceName for source in sourcesDen track by source.id"></select>
+                            </div>
+                            <div class="span1">
+                                <span>Map:</span>
+                            </div>
+                            <div class="span1">
+                                <select id="ddlMaDen" style="width: 100%" ng-model="ddlMapDen" ng-options="map as map.mapName for map in mapsDen track by map.id"></select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span1">
+                    Multiplier:
+                </div>
+                <div class="span2">
+                    <input id="txtMul" type="number" style="width:90%" value="1" ng-model="multiplier" ng-init="multiplier=1" />
+                </div>
+                <div class="span1">
+                    Operator:
+                </div>
+                <div class="span2">
+                    <select ng-model="operator" style="width:100%" ng-init="operator='/'">
+                        <option value="/">Division</option>
+                        <option value="x">Multiplication</option>
+                        <option value="+">Submission</option>
+                        <option value="-">Subtraction</option>
+                    </select>
+                </div>
+                <div class="span6">
+                    <div class="eq-c text-center" style="color: green; font-weight: 600;">
+                        {{indicatorName}} =
+                        <span id="lblNum" class="fup">{{ddlIndicatorNum.indicatorName}} ({{ddlYearNum.year}})</span>
+                        <span class="bar">{{operator}}</span>
+                        <span class="fdn">{{ddlIndicatorDen.indicatorName}} ({{ddlYearDen.year}})</span>
+                        <span>X  {{multiplier}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-click="getCustomData()" type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    </form>
+    <div class="modal hide fade responsive" id="DistModal" style="width: 700px">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3> <span id="ModalHeader"></span></h3>
+        </div>
+        <div class="modal-body responsive">
+            <div id="dlist" class="row-fluid">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal hide fade responsive" id="modalUploadData" style="width: 700px">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3>Upload Your Data</h3>
+        </div>
+        <div class="modal-body responsive">
+            <div class="control-group">
+                <div><a href="dbContent/sample.xlsx">Download Sample File</a> <button type="button" class="btn btn-info btn-small pull-right" ng-click="insertData()">Save your data</button></div>
+                <br />
+                <div class="controls">
+                    <div class="drop">Drop an XLSX file here to see sheet data</div>
+                    <br />
+                    Or you can
+                    <input type="file" name="xlfile" id="xlf">
+                </div>
+                <div>
+                    <h3>Instruction</h3>
+                    <ul>
+                        <li>
+                            File must be in xlsx format.
+                        </li>
+                        <li>
+                            First two coloum must be same as sample file, please don't change the order of district.
+                        </li>
+                        <li>
+                            Values must be in number.
+                        </li>
+                        <li>
+                            You can increase number of sheet for different year,except the data part do not change the other information in the additional sheets, a small change in spelling would also result in mismatch and the output would not be generated
+                        </li>
+                        <li>
+                            Unit should be Number, Ratio or Percent.
+                        </li>
+                        <li>
+                            If you have specific formate of excel sheet then you can drag and drop anywhere in the dashboard.
+                        </li>
+                        <li>
+                            Your data will not be saved in our server, so if you refresh the main dashboard your custom data would be lost
+                        </li>
+                        <li>
+                            We are working on saving of data files in server it would be made available after sometime.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    <div class="modal hide fade responsive" id="modalDisclaimer" style="width: 700px">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3>Disclaimer</h3>
+        </div>
+        <div class="modal-body responsive">
+            <div class="control-group">
+
+                <div>
+                    <ul>
+                        <li>
+                            The maps are for representational purpose only.
+                        </li>
+                        <li>
+                            Due to delayed registration and registration at the place of event, level of registration may have gone above 100% (for CRVS only)
+                        </li>
+                        <li>
+                            For each indicator, Districts are grouped into three equal part i.e. 9 whatever the values are, you can change the legend value to group districts.
+                        </li>
+                        <li>
+                            Chhattisgarh Population Clock based on 2001-2011 population growth rate.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    <!--<div id="wait" style="display:block;width:220px;height:100px;position:absolute;top:29%;left:50%;padding:2px;"><img src='images/loader.gif' width="220" height="100" /></div>-->
+    <!-- custom indicator modal close-->
+</div>
